@@ -9,7 +9,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET);
 const fileUpload = require('express-fileupload');
 const port = process.env.PORT || 5000;
 
-
+// middleware
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
@@ -56,6 +56,7 @@ async function run() {
         const myCollections = database.collection("myProducts");
         const reviewCollections = database.collection("userReview");
 
+        // getting-product-with-category
         app.get('/products/:category', async(req, res) => {
             const category = req.params.category;
             const query = { category: category }
@@ -64,6 +65,7 @@ async function run() {
         })
 
 
+        // getting-product-with-condition
         app.get('/allProducts', async(req, res) => {
            const cursor = shopCollections.find({});
             const page = req.query.page;
@@ -85,6 +87,8 @@ async function run() {
         })
 
 
+
+        // detail-of-a-single-product
         app.get('/detailOne/:id', async(req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
@@ -92,12 +96,14 @@ async function run() {
             res.json(result);
         })
 
+        // save-user-to-database
         app.post('/setUser', async(req, res) => {
             const user = req.body;
             const result = await userCollections.insertOne(user);
             res.send(result)
         })
 
+        // updating-user-info
         app.put('/setUser', async(req, res) => {
             const user = req.body;
             const upsert = { upsert: true };
@@ -109,6 +115,7 @@ async function run() {
             res.send(result)
         })
 
+        // checking-admin
         app.get('/checkAdmin/:email', async(req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -121,6 +128,7 @@ async function run() {
         })
 
 
+        //posting-ordered-product
         app.post('/myProduct', async(req, res)=>{
             const product= req.body;
             const result = await myCollections.insertOne(product);
@@ -157,6 +165,7 @@ async function run() {
         })
 
 
+        //   getting-all-ordered-product
         app.get('/getAllOrders',verifyToken, async (req,res)=>{
             const query = {};
             if(req?.decodedEmail){
@@ -265,6 +274,7 @@ async function run() {
         })
 
 
+        // updating-stock
         app.put('/updateStock',verifyToken, async (req,res)=>{
             if(req?.decodedEmail){
                 const stock = req.body.TotalStock.stock;
@@ -288,7 +298,8 @@ async function run() {
 
 
 
-
+ 
+        // update-stock-with-description-match
         app.put('/updateStockWithDes',verifyToken, async (req,res)=>{
             if(req?.decodedEmail){
                 const stock = req.body.stock.stock;
@@ -311,6 +322,7 @@ async function run() {
 
 
 
+        // creating-a-payment-intent
         app.post('/create-payment-intent', async (req, res) => {
             const paymentInfo = req.body;
             const amount = Number(paymentInfo.price) * 100;
@@ -325,6 +337,7 @@ async function run() {
 
 
 
+        // updating-paid-product
         app.put('/paidProduct/:id', async (req, res) => {
             const id = req.params.id;
             const payment = req.body;
