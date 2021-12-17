@@ -339,6 +339,10 @@ async function run() {
         });
 
 
+        app.get('/trail', async (req,res)=>{
+            res.json('successfully came from heroku')
+        })
+
     } finally {
         // await client.close();
     }
