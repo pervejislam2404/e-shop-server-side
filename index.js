@@ -351,6 +351,20 @@ async function run() {
             res.json(result);
         });
 
+        // set-main-product-stock
+        app.put('/setStock', async (req, res) => {
+            const id = req.body.info.id;
+            const stock = req.body.info.stock;
+            const filter = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    stock: stock,
+                }
+            };
+            const result = await shopCollections.updateOne(filter, updateDoc);
+            res.json(result);
+        })
+
 
         app.get('/trail', async (req,res)=>{
             res.json('successfully came from heroku')
