@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
 
+
 // jwt
 const serviceAccount = require("./baby-care-products-50b0d-firebase-adminsdk.json");
 
@@ -278,7 +279,6 @@ async function run() {
         app.put('/updateStock',verifyToken, async (req,res)=>{
             if(req?.decodedEmail){
                 const stock = req.body.TotalStock.stock;
-                console.log(stock+'from stock')
                 const id = req.body.TotalStock.id;
                 const options = { upsert: true };
                 const query = {_id: ObjectId(id)}
@@ -366,9 +366,6 @@ async function run() {
         })
 
 
-        app.get('/trail', async (req,res)=>{
-            res.json('successfully came from heroku')
-        })
 
     } finally {
         // await client.close();
